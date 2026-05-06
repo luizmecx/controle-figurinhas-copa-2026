@@ -34,7 +34,7 @@ export function SectionAccordion({
         onClick={() => setOpen((o) => !o)}
         className="relative w-full text-left"
       >
-        <div className="bg-26 px-4 py-3 flex items-center gap-3">
+        <div className="bg-neutral-800 px-4 py-3 flex items-center gap-3">
           <div className="flex-1 min-w-0">
             <div className="font-display font-black text-white text-stroke-shadow text-lg leading-none tracking-tight">
               {section.name}
