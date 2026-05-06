@@ -72,18 +72,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Controle de Figurinhas - COPA 2026" },
+      { title: "COPA 2026 — Controle de Figurinhas" },
       { name: "description", content: "Controle suas figurinhas da Copa do Mundo FIFA 2026." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Controle de Figurinhas - COPA 2026" },
+      { property: "og:title", content: "COPA 2026 — Controle de Figurinhas" },
       { property: "og:description", content: "Controle suas figurinhas da Copa do Mundo FIFA 2026." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Controle de Figurinhas - COPA 2026" },
-      { name: "twitter:description", content: "Controle suas figurinhas da Copa do Mundo FIFA 2026." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f37236dd-4345-4fc6-8415-951dc70021d5/id-preview-4b841aca--6c456453-76cd-4900-b0d3-6b4c18d1cb48.lovable.app-1778102465473.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f37236dd-4345-4fc6-8415-951dc70021d5/id-preview-4b841aca--6c456453-76cd-4900-b0d3-6b4c18d1cb48.lovable.app-1778102465473.png" },
     ],
     links: [
       {

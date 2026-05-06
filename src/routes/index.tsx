@@ -4,7 +4,7 @@ import { AppShell } from "@/components/AppShell";
 import { AppHeader } from "@/components/AppHeader";
 import { SectionAccordion } from "@/components/SectionAccordion";
 import { ALL_CODES, SECTIONS } from "@/lib/stickers-data";
-import { getEntry, useAlbum } from "@/lib/album-store";
+import { getStatus, useAlbum } from "@/lib/album-store";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -24,7 +24,7 @@ function Index() {
   const [filter, setFilter] = useState<Filter>("all");
 
   const owned = useMemo(
-    () => ALL_CODES.filter((c) => getEntry(album, c).isCollected).length,
+    () => ALL_CODES.filter((c) => getStatus(album, c) >= 1).length,
     [album],
   );
 
@@ -32,9 +32,9 @@ function Index() {
     const q = query.trim().toUpperCase();
     const set = new Set<string>();
     for (const code of ALL_CODES) {
-      const e = getEntry(album, code);
-      if (filter === "missing" && e.isCollected) continue;
-      if (filter === "duplicates" && e.duplicates === 0) continue;
+      const s = getStatus(album, code);
+      if (filter === "missing" && s !== 0) continue;
+      if (filter === "duplicates" && s !== 2) continue;
       if (q && !code.includes(q)) continue;
       set.add(code);
     }
@@ -43,7 +43,7 @@ function Index() {
 
   const filterPills: { id: Filter; label: string; cls: string }[] = [
     { id: "all", label: "Todas", cls: "bg-cup-blue text-white" },
-    { id: "missing", label: "Faltantes", cls: "bg-cup-gold text-cup-bg" },
+    { id: "missing", label: "Faltantes", cls: "bg-cup-gold text-foreground" },
     { id: "duplicates", label: "Repetidas", cls: "bg-cup-red text-white" },
   ];
 
@@ -51,7 +51,7 @@ function Index() {
     <AppShell>
       <AppHeader query={query} onQuery={setQuery} owned={owned} total={ALL_CODES.length} />
 
-      <div className="px-4 py-3 flex gap-2 overflow-x-auto bg-cup-bg">
+      <div className="px-4 py-3 flex gap-2 overflow-x-auto bg-background sticky top-0">
         {filterPills.map((p) => (
           <button
             key={p.id}
@@ -59,7 +59,7 @@ function Index() {
             className={`px-4 py-1.5 rounded-full text-xs font-display font-bold whitespace-nowrap transition-all ${
               filter === p.id
                 ? `${p.cls} shadow-md scale-105`
-                : "bg-white/10 text-white/80 border border-white/10"
+                : "bg-secondary text-secondary-foreground"
             }`}
           >
             {p.label}
@@ -67,7 +67,7 @@ function Index() {
         ))}
       </div>
 
-      <div className="px-3 pb-6 space-y-3 bg-cup-bg">
+      <div className="px-3 pb-6 space-y-3">
         {SECTIONS.map((s, i) => (
           <SectionAccordion
             key={s.id}
