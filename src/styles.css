@@ -28,79 +28,62 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-cup-bg: var(--cup-bg);
   --color-cup-green: var(--cup-green);
   --color-cup-gold: var(--cup-gold);
   --color-cup-red: var(--cup-red);
   --color-cup-blue: var(--cup-blue);
   --color-cup-pink: var(--cup-pink);
+  --color-cup-paper: var(--cup-paper);
   --font-display: "Noto Sans", system-ui, sans-serif;
 }
 
 :root {
-  --radius: 0.75rem;
-  --background: oklch(0.98 0.005 100);
-  --foreground: oklch(0.15 0.02 260);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.15 0.02 260);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0.02 260);
-  --primary: oklch(0.65 0.22 145);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.95 0.01 260);
-  --secondary-foreground: oklch(0.2 0.02 260);
-  --muted: oklch(0.96 0.005 260);
-  --muted-foreground: oklch(0.5 0.02 260);
-  --accent: oklch(0.85 0.18 90);
-  --accent-foreground: oklch(0.2 0.02 260);
-  --destructive: oklch(0.6 0.24 27);
-  --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.9 0.01 260);
-  --input: oklch(0.93 0.01 260);
-  --ring: oklch(0.65 0.22 145);
+  --radius: 0.6rem;
 
-  /* FIFA 2026 brand palette */
-  --cup-green: oklch(0.72 0.22 145);
-  --cup-gold: oklch(0.82 0.17 90);
-  --cup-red: oklch(0.62 0.24 27);
-  --cup-blue: oklch(0.55 0.2 260);
-  --cup-pink: oklch(0.72 0.2 0);
+  /* FIFA 2026 forced palette */
+  --cup-bg: #0B1325;
+  --cup-green: #00C671;
+  --cup-red: #E3003F;
+  --cup-gold: #FFD700;
+  --cup-blue: #1E5BFF;
+  --cup-pink: #FF3D8B;
+  --cup-paper: #f3f4f6;
+
+  --background: #0B1325;
+  --foreground: #ffffff;
+  --card: #ffffff;
+  --card-foreground: #0B1325;
+  --popover: #ffffff;
+  --popover-foreground: #0B1325;
+  --primary: #00C671;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f4f6;
+  --secondary-foreground: #0B1325;
+  --muted: #1a2238;
+  --muted-foreground: #9aa5bd;
+  --accent: #FFD700;
+  --accent-foreground: #0B1325;
+  --destructive: #E3003F;
+  --destructive-foreground: #ffffff;
+  --border: rgba(255,255,255,0.1);
+  --input: rgba(255,255,255,0.08);
+  --ring: #00C671;
 }
 
 @layer base {
   * { border-color: var(--color-border); }
-  html, body { font-family: "Noto Sans", system-ui, sans-serif; }
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    -webkit-tap-highlight-color: transparent;
+  html, body {
+    font-family: "Noto Sans", system-ui, sans-serif;
+    background-color: var(--cup-bg);
+    color: #fff;
   }
+  body { -webkit-tap-highlight-color: transparent; }
 }
 
 @layer utilities {
-  /* TOGETHER GRAPHIC: grid de blocos coloridos */
-  .bg-together {
-    background-color: oklch(0.95 0.01 260);
-    background-image:
-      linear-gradient(45deg, var(--cup-green) 25%, transparent 25%),
-      linear-gradient(-45deg, var(--cup-gold) 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, var(--cup-red) 75%),
-      linear-gradient(-45deg, transparent 75%, var(--cup-blue) 75%);
-    background-size: 16px 16px;
-    background-position: 0 0, 0 8px, 8px -8px, -8px 0;
-    opacity: 0.45;
-  }
-  .bg-together-soft {
-    background-color: oklch(0.97 0.01 260);
-    background-image:
-      conic-gradient(from 0deg at 50% 50%,
-        color-mix(in oklab, var(--cup-green) 35%, white),
-        color-mix(in oklab, var(--cup-gold) 35%, white),
-        color-mix(in oklab, var(--cup-red) 35%, white),
-        color-mix(in oklab, var(--cup-blue) 35%, white),
-        color-mix(in oklab, var(--cup-green) 35%, white));
-    background-size: 18px 18px;
-    background-repeat: repeat;
-  }
+  .bg-app { background-color: var(--cup-bg); }
+
   /* AMPLIFY PATTERN: linhas concêntricas coloridas */
   .bg-amplify {
     background:
@@ -110,29 +93,45 @@
         var(--cup-red) 8px 12px,
         var(--cup-blue) 12px 16px,
         transparent 16px 28px),
-      linear-gradient(180deg, oklch(0.18 0.04 260), oklch(0.1 0.04 260));
+      linear-gradient(180deg, #0B1325, #050a18);
   }
-  /* 26 GRAPHIC: vermelho e azul */
   .bg-26 {
     background:
       linear-gradient(135deg, var(--cup-red) 0%, var(--cup-red) 50%, var(--cup-blue) 50%, var(--cup-blue) 100%);
   }
-  /* UNIFY PATTERN */
   .bg-unify {
-    background:
+    background-color: var(--cup-bg);
+    background-image:
       repeating-linear-gradient(45deg,
-        color-mix(in oklab, var(--cup-green) 20%, transparent) 0 14px,
-        color-mix(in oklab, var(--cup-gold) 20%, transparent) 14px 28px,
-        color-mix(in oklab, var(--cup-red) 20%, transparent) 28px 42px,
-        color-mix(in oklab, var(--cup-blue) 20%, transparent) 42px 56px);
+        rgba(0,198,113,0.08) 0 14px,
+        rgba(255,215,0,0.08) 14px 28px,
+        rgba(227,0,63,0.08) 28px 42px,
+        rgba(30,91,255,0.08) 42px 56px);
   }
+
   .text-stroke-shadow {
-    text-shadow: 0 1px 0 rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.35);
+    text-shadow: 0 1px 0 rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.45);
   }
   .modular-display {
     font-family: "Noto Sans", system-ui, sans-serif;
     font-weight: 900;
     letter-spacing: -0.04em;
     line-height: 0.85;
+  }
+
+  /* Paper-like sticker shadow */
+  .sticker-paper {
+    box-shadow:
+      0 1px 0 rgba(0,0,0,0.06) inset,
+      0 1px 2px rgba(0,0,0,0.18),
+      0 4px 10px -4px rgba(0,0,0,0.25);
+    background-image: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0));
+  }
+
+  .glass {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid rgba(255,255,255,0.18);
   }
 }
