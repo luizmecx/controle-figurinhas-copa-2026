@@ -16,7 +16,7 @@ export function updateLocalTimestamp(user: string) {
   localStorage.setItem(TIMESTAMPS_KEY, JSON.stringify(ts));
 }
 
-function getLocalAlbums() {
+export function getLocalAlbums() {
   const albums: Record<string, any> = {};
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
@@ -30,7 +30,7 @@ function getLocalAlbums() {
   return albums;
 }
 
-function getLocalUsers() {
+export function getLocalUsers() {
   try {
     return JSON.parse(localStorage.getItem(USERS_KEY) || "{}");
   } catch {
