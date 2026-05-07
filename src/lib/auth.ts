@@ -27,6 +27,12 @@ export function getCurrentUser() {
   return currentUser;
 }
 
+export function getCurrentPassword() {
+  if (!currentUser) return null;
+  const users = loadUsers();
+  return users[currentUser] || null;
+}
+
 export function signUp(user: string, pwd: string): { success: boolean; error?: string } {
   const users = loadUsers();
   const lowerUser = user.trim().toLowerCase();
@@ -50,6 +56,18 @@ export function signIn(user: string, pwd: string): { success: boolean; error?: s
   currentUser = lowerUser;
   localStorage.setItem(SESSION_KEY, lowerUser);
   emit();
+  return { success: true };
+}
+
+export function changePassword(user: string, newPwd: string): { success: boolean; error?: string } {
+  const users = loadUsers();
+  const lowerUser = user.trim().toLowerCase();
+  
+  if (!users[lowerUser]) return { success: false, error: "Usuário não encontrado" };
+  if (!newPwd.trim()) return { success: false, error: "A nova senha não pode ser vazia" };
+
+  users[lowerUser] = newPwd;
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
   return { success: true };
 }
 
