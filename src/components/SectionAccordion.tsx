@@ -59,7 +59,7 @@ export function SectionAccordion({
             <img 
               src="https://logodownload.org/wp-content/uploads/2014/04/coca-cola-logo-2.png" 
               alt="Coca-Cola Logo" 
-              className="w-8 h-6 object-contain rounded-sm border border-white/40 bg-white shadow shrink-0 p-0.5" 
+              className="w-8 h-6 object-cover rounded-sm border border-white/40 bg-white shadow shrink-0" 
             />
           ) : section.kind === "special" ? (
             <img 
