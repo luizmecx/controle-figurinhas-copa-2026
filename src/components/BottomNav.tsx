@@ -4,14 +4,13 @@ import { LayoutGrid, BarChart3, Settings } from "lucide-react";
 const items = [
   { to: "/", label: "Álbum", icon: LayoutGrid },
   { to: "/stats", label: "Estatísticas", icon: BarChart3 },
-  { to: "/settings", label: "Configurações", icon: Settings },
 ] as const;
 
 export function BottomNav() {
   const loc = useLocation();
   return (
     <nav className="sticky bottom-0 z-40 bg-card border-t border-border">
-      <div className="grid grid-cols-3">
+      <div className="grid grid-cols-2">
         {items.map(({ to, label, icon: Icon }) => {
           const active = loc.pathname === to;
           return (

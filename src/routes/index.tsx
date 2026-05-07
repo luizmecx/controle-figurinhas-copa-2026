@@ -57,7 +57,6 @@ function Index() {
             key={s.id}
             section={s}
             album={album}
-            defaultOpen={i === 0}
             filterCodes={query || filter !== "all" ? filterCodes : undefined}
             isDuplicatesView={filter === "duplicates"}
           />
