@@ -1,9 +1,9 @@
-import { useEffect, useState, useCallback, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 
-const KEY = "fifa26-album-v1";
+const KEY = "fifa26-album-v2";
 
-// 0 = faltante, 1 = tenho, 2+ = repetidas (count of duplicates)
-export type AlbumState = Record<string, number>;
+export type StickerEntry = { isCollected: boolean; duplicates: number };
+export type AlbumState = Record<string, StickerEntry>;
 
 let state: AlbumState = {};
 const listeners = new Set<() => void>();
@@ -12,7 +12,18 @@ function load(): AlbumState {
   if (typeof window === "undefined") return {};
   try {
     const raw = localStorage.getItem(KEY);
-    return raw ? JSON.parse(raw) : {};
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    // tolerate legacy v1 (number)
+    const out: AlbumState = {};
+    for (const [k, v] of Object.entries(parsed)) {
+      if (typeof v === "number") {
+        out[k] = { isCollected: v >= 1, duplicates: v >= 2 ? v - 1 : 0 };
+      } else if (v && typeof v === "object") {
+        out[k] = v as StickerEntry;
+      }
+    }
+    return out;
   } catch {
     return {};
   }
@@ -22,40 +33,63 @@ function persist() {
   if (typeof window === "undefined") return;
   localStorage.setItem(KEY, JSON.stringify(state));
 }
-
-function emit() {
-  listeners.forEach((l) => l());
-}
+function emit() { listeners.forEach((l) => l()); }
 
 export function initAlbum() {
   state = load();
   emit();
 }
 
-export function cycleSticker(code: string) {
-  const cur = state[code] ?? 0;
-  // 0 -> 1 -> 2 -> 0
-  const next = cur >= 2 ? 0 : cur + 1;
-  state = { ...state, [code]: next };
-  persist();
-  emit();
+function get(code: string): StickerEntry {
+  return state[code] ?? { isCollected: false, duplicates: 0 };
 }
 
-export function incrementDuplicate(code: string) {
-  const cur = state[code] ?? 0;
-  state = { ...state, [code]: Math.max(2, cur + 1) };
-  persist();
-  emit();
+export function toggleCollected(code: string) {
+  const cur = get(code);
+  const next: StickerEntry = cur.isCollected
+    ? { isCollected: false, duplicates: 0 }
+    : { isCollected: true, duplicates: cur.duplicates };
+  state = { ...state, [code]: next };
+  persist(); emit();
+}
+
+export function setDuplicates(code: string, n: number) {
+  const cur = get(code);
+  if (!cur.isCollected) return;
+  const v = Math.max(0, Math.min(99, n));
+  state = { ...state, [code]: { ...cur, duplicates: v } };
+  persist(); emit();
+}
+
+export function incDuplicate(code: string) {
+  const cur = get(code);
+  if (!cur.isCollected) return;
+  setDuplicates(code, cur.duplicates + 1);
+}
+
+export function decDuplicate(code: string) {
+  const cur = get(code);
+  if (!cur.isCollected) return;
+  setDuplicates(code, cur.duplicates - 1);
 }
 
 export function resetAlbum() {
   state = {};
-  persist();
-  emit();
+  persist(); emit();
 }
 
-export function getStateSnapshot(): AlbumState {
-  return state;
+export function getEntry(album: AlbumState, code: string): StickerEntry {
+  return album[code] ?? { isCollected: false, duplicates: 0 };
+}
+
+// Legacy compat helpers used elsewhere
+export function getStatus(album: AlbumState, code: string): 0 | 1 | 2 {
+  const e = getEntry(album, code);
+  if (!e.isCollected) return 0;
+  return e.duplicates > 0 ? 2 : 1;
+}
+export function getDuplicates(album: AlbumState, code: string): number {
+  return getEntry(album, code).duplicates;
 }
 
 function subscribe(cb: () => void) {
@@ -65,26 +99,7 @@ function subscribe(cb: () => void) {
 
 export function useAlbum(): AlbumState {
   const [hydrated, setHydrated] = useState(false);
-  useEffect(() => {
-    initAlbum();
-    setHydrated(true);
-  }, []);
-  const snap = useSyncExternalStore(
-    subscribe,
-    getStateSnapshot,
-    () => ({}),
-  );
+  useEffect(() => { initAlbum(); setHydrated(true); }, []);
+  const snap = useSyncExternalStore(subscribe, () => state, () => ({}));
   return hydrated ? snap : {};
-}
-
-export function getStatus(album: AlbumState, code: string): 0 | 1 | 2 {
-  const v = album[code] ?? 0;
-  if (v === 0) return 0;
-  if (v === 1) return 1;
-  return 2;
-}
-
-export function getDuplicates(album: AlbumState, code: string): number {
-  const v = album[code] ?? 0;
-  return v >= 2 ? v - 1 : 0;
 }
