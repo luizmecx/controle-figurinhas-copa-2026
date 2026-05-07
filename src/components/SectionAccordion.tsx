@@ -15,6 +15,7 @@ export function SectionAccordion({
   album: AlbumState;
   defaultOpen?: boolean;
   filterCodes?: Set<string>;
+  isDuplicatesView?: boolean;
 }) {
   const [open, setOpen] = useState(defaultOpen);
 
@@ -106,7 +107,7 @@ export function SectionAccordion({
           >
             <div className="p-3 grid grid-cols-4 sm:grid-cols-5 gap-2 bg-background">
               {codes.map((code) => (
-                <StickerCard key={code} code={code} album={album} />
+                <StickerCard key={code} code={code} album={album} isDuplicatesView={isDuplicatesView} />
               ))}
             </div>
           </motion.div>

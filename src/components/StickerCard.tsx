@@ -8,8 +8,23 @@ import {
   type AlbumState,
 } from "@/lib/album-store";
 
-export function StickerCard({ code, album }: { code: string; album: AlbumState }) {
+export function StickerCard({ code, album, isDuplicatesView }: { code: string; album: AlbumState; isDuplicatesView?: boolean }) {
   const { isCollected, duplicates } = getEntry(album, code);
+
+  if (isDuplicatesView) {
+    return (
+      <div className="flex flex-col">
+        <div className="relative aspect-[3/4] rounded-md shadow-sm flex items-center justify-center font-bold text-sm select-none border overflow-hidden bg-[#00C671] text-white border-[#00C671]">
+          <span className="font-display tracking-tight text-[0.78rem] sm:text-sm break-all px-1 text-center">
+            {code}
+          </span>
+          <div className="absolute top-1 right-1 bg-white text-[#e11d48] rounded-full min-w-[16px] h-[16px] flex items-center justify-center text-[10px] px-1 font-bold shadow">
+            +{duplicates}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col">
