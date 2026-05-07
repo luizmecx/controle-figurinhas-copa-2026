@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { AppHeader } from "@/components/AppHeader";
 import { SectionAccordion } from "@/components/SectionAccordion";
-import { ALL_CODES, SECTIONS } from "@/lib/stickers-data";
+import { ALL_CODES, SECTIONS, COUNTRIES } from "@/lib/stickers-data";
 import { getEntry, useAlbum } from "@/lib/album-store";
 
 export const Route = createFileRoute("/")({
@@ -36,11 +36,33 @@ function Index() {
   const filterCodes = useMemo(() => {
     const q = query.trim().toUpperCase();
     const set = new Set<string>();
+
+    // Build a set of country prefixes whose code OR name matches the query.
+    // e.g. "brasil" → matches BRA, "fra" → matches FRA.
+    const matchedCountryCodes = new Set<string>(
+      COUNTRIES
+        .filter((c) =>
+          c.code.includes(q) ||
+          c.name.toUpperCase().includes(q)
+        )
+        .map((c) => c.code)
+    );
+
     for (const code of ALL_CODES) {
       const e = getEntry(album, code);
       if (filter === "missing" && e.isCollected) continue;
       if (filter === "duplicates" && e.duplicates === 0) continue;
-      if (q && !code.includes(q)) continue;
+
+      if (q) {
+        // 1. Direct sticker-code match (e.g. "BRA1", "FWC3")
+        const directMatch = code.includes(q);
+        // 2. Country-name / country-code section match
+        const countryMatch = matchedCountryCodes.has(
+          SECTIONS.find((s) => s.codes.includes(code))?.id ?? ""
+        );
+        if (!directMatch && !countryMatch) continue;
+      }
+
       set.add(code);
     }
     return set;
