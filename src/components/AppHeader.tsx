@@ -70,7 +70,7 @@ export function AppHeader({
               <input
                 value={query}
                 onChange={(e) => onQuery(e.target.value)}
-                placeholder="Buscar (ex: BRA, MEX, FWC1)"
+                placeholder="Buscar por país ou código (ex: Brasil, BRA, FWC1)"
                 className="w-full bg-white/95 text-foreground placeholder:text-neutral-500 rounded-full pl-9 pr-4 py-2 text-sm font-medium outline-none focus:ring-2 focus:ring-yellow-300"
               />
             </div>
