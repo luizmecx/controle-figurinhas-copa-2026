@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { StickerCard } from "./StickerCard";
 import type { Section } from "@/lib/stickers-data";
-import { getStatus, type AlbumState } from "@/lib/album-store";
+import { getEntry, type AlbumState } from "@/lib/album-store";
 
 export function SectionAccordion({
   section,
@@ -21,38 +21,57 @@ export function SectionAccordion({
   const codes = filterCodes
     ? section.codes.filter((c) => filterCodes.has(c))
     : section.codes;
-
   if (codes.length === 0) return null;
 
-  const owned = section.codes.filter((c) => getStatus(album, c) >= 1).length;
+  const owned = section.codes.filter((c) => getEntry(album, c).isCollected).length;
   const total = section.codes.length;
   const pct = (owned / total) * 100;
 
+  const meta = section.meta;
+  const gradient = meta
+    ? `linear-gradient(135deg, ${meta.from} 0%, ${meta.to} 100%)`
+    : "linear-gradient(135deg, #1f2937 0%, #4b5563 100%)";
+
+  const flagUrl = meta ? `https://flagcdn.com/w40/${meta.iso}.png` : null;
+
   return (
-    <div className="rounded-xl overflow-hidden border border-border bg-card shadow-sm">
+    <div className="rounded-xl overflow-hidden border border-border bg-card shadow-sm flex flex-col">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="sticky top-0 z-10 w-full text-left"
+        className="relative w-full text-left"
       >
-        <div className="bg-neutral-800 px-4 py-3 flex items-center gap-3">
+        <div className="absolute inset-0 bg-black/30" />
+        <div className="relative px-3 py-3 flex items-center gap-3">
+          {flagUrl ? (
+            <img
+              src={flagUrl}
+              alt={`Bandeira ${meta?.name}`}
+              className="w-8 h-6 object-cover rounded-sm border border-white/40 shadow shrink-0"
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-8 h-6 rounded-sm bg-white/20 border border-white/40 grid place-items-center text-white text-[10px] font-bold">
+              ★
+            </div>
+          )}
           <div className="flex-1 min-w-0">
-            <div className="font-display font-black text-white text-stroke-shadow text-lg leading-none tracking-tight">
+            <div className="font-display font-black text-white text-stroke-shadow text-base leading-tight tracking-tight truncate">
               {section.name}
             </div>
-            <div className="text-[11px] text-white/90 mt-1 font-medium">
+            <div className="text-[11px] text-white/95 mt-0.5 font-medium">
               {owned}/{total} coladas
             </div>
           </div>
-          <div className="text-white/95 font-display font-black text-2xl text-stroke-shadow">
+          <div className="text-white font-display font-black text-xl text-stroke-shadow">
             {Math.round(pct)}%
           </div>
           <motion.div animate={{ rotate: open ? 180 : 0 }}>
             <ChevronDown className="text-white" />
           </motion.div>
         </div>
-        <div className="h-1.5 bg-black/20">
+        <div className="relative h-1.5 bg-black/25">
           <div
-            className="h-full bg-cup-green transition-all"
+            className="h-full bg-[#00C671] transition-all"
             style={{ width: `${pct}%` }}
           />
         </div>
@@ -67,7 +86,7 @@ export function SectionAccordion({
             transition={{ duration: 0.25 }}
             className="relative z-0 overflow-hidden"
           >
-            <div className="p-3 pt-6 grid grid-cols-4 sm:grid-cols-5 gap-2 bg-background">
+            <div className="p-3 grid grid-cols-4 sm:grid-cols-5 gap-2 bg-background">
               {codes.map((code) => (
                 <StickerCard key={code} code={code} album={album} />
               ))}
