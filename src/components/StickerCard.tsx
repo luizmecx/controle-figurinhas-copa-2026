@@ -1,16 +1,23 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, Minus, Plus, Trash2, AlertTriangle } from "lucide-react";
 import {
   toggleCollected,
   incDuplicate,
   decDuplicate,
-  getEntry,
-  type AlbumState,
 } from "@/lib/album-store";
 
-export function StickerCard({ code, album, isDuplicatesView }: { code: string; album: AlbumState; isDuplicatesView?: boolean }) {
-  const { isCollected, duplicates } = getEntry(album, code);
+export const StickerCard = memo(function StickerCard({ 
+  code, 
+  isCollected, 
+  duplicates, 
+  isDuplicatesView 
+}: { 
+  code: string; 
+  isCollected: boolean; 
+  duplicates: number; 
+  isDuplicatesView?: boolean; 
+}) {
   const [showConfirm, setShowConfirm] = useState(false);
 
   if (isDuplicatesView) {
@@ -171,4 +178,4 @@ export function StickerCard({ code, album, isDuplicatesView }: { code: string; a
       </AnimatePresence>
     </div>
   );
-}
+});
