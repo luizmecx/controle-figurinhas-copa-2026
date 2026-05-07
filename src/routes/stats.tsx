@@ -21,7 +21,17 @@ function StatsPage() {
       else missing++;
       if (e.duplicates > 0) { dupKinds++; dupTotal += e.duplicates; }
     }
-    return { owned, missing, dupKinds, dupTotal, total: ALL_CODES.length };
+    
+    let completedTeams = 0;
+    for (const s of SECTIONS) {
+      if (s.kind === "team") {
+        if (s.codes.every(c => getEntry(album, c).isCollected)) {
+          completedTeams++;
+        }
+      }
+    }
+
+    return { owned, missing, dupKinds, dupTotal, completedTeams, total: ALL_CODES.length };
   }, [album]);
 
   const top = useMemo(() => {
@@ -70,8 +80,8 @@ function StatsPage() {
           <div className="grid grid-cols-2 gap-3">
             <StatCard label="Coladas" value={stats.owned} cls="bg-[#00C671] text-white" />
             <StatCard label="Faltantes" value={stats.missing} cls="bg-yellow-400 text-neutral-900" />
-            <StatCard label="Tipos repetidos" value={stats.dupKinds} cls="bg-rose-600 text-white" />
-            <StatCard label="Repetidas (total)" value={stats.dupTotal} cls="bg-blue-700 text-white" />
+            <StatCard label="Seleções completas" value={stats.completedTeams} cls="bg-blue-700 text-white" />
+            <StatCard label="Repetidas (total)" value={stats.dupTotal} cls="bg-rose-600 text-white" />
           </div>
 
           <div className="bg-white/95 rounded-2xl p-4 border border-white/30 shadow">
