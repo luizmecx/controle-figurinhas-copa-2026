@@ -1,0 +1,15 @@
+{
+  "name": "Copa 2026",
+  "short_name": "Copa 2026",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#0B1325",
+  "background_color": "#0B1325",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ]
+}

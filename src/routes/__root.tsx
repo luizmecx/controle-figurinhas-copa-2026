@@ -72,6 +72,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "theme-color", content: "#0B1325" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { title: "Controle de Figurinhas - COPA 2026" },
       { name: "description", content: "Controle suas figurinhas da Copa do Mundo FIFA 2026." },
       { name: "author", content: "Lovable" },
@@ -86,6 +89,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f37236dd-4345-4fc6-8415-951dc70021d5/id-preview-4b841aca--6c456453-76cd-4900-b0d3-6b4c18d1cb48.lovable.app-1778102465473.png" },
     ],
     links: [
+      {
+        rel: "manifest",
+        href: "/manifest.json",
+      },
+      {
+        rel: "apple-touch-icon",
+        href: "/favicon.svg",
+      },
       {
         rel: "icon",
         type: "image/svg+xml",
