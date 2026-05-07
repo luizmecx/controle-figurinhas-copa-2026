@@ -12,6 +12,7 @@ export function AppHeader({
   onQuery,
   owned,
   total,
+  totalDuplicates,
   filter,
   onFilter,
 }: {
@@ -19,6 +20,7 @@ export function AppHeader({
   onQuery: (q: string) => void;
   owned: number;
   total: number;
+  totalDuplicates: number;
   filter: Filter;
   onFilter: (f: Filter) => void;
 }) {
@@ -27,7 +29,7 @@ export function AppHeader({
   const pills: { id: Filter; label: string }[] = [
     { id: "all", label: "Todas" },
     { id: "missing", label: "Faltantes" },
-    { id: "duplicates", label: "Repetidas" },
+    { id: "duplicates", label: `Repetidas (${totalDuplicates})` },
   ];
 
   const [settingsOpen, setSettingsOpen] = useState(false);

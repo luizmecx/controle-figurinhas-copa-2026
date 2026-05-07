@@ -28,6 +28,11 @@ function Index() {
     [album],
   );
 
+  const totalDuplicates = useMemo(
+    () => ALL_CODES.reduce((acc, c) => acc + getEntry(album, c).duplicates, 0),
+    [album]
+  );
+
   const filterCodes = useMemo(() => {
     const q = query.trim().toUpperCase();
     const set = new Set<string>();
@@ -48,6 +53,7 @@ function Index() {
         onQuery={setQuery}
         owned={owned}
         total={ALL_CODES.length}
+        totalDuplicates={totalDuplicates}
         filter={filter}
         onFilter={setFilter}
       />

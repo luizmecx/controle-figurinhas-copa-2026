@@ -79,7 +79,9 @@ export function SectionAccordion({
               {section.name}
             </div>
             <div className="text-[11px] text-white/95 mt-0.5 font-medium">
-              {owned}/{total} coladas
+              {isDuplicatesView
+                ? `${section.codes.reduce((acc, code) => acc + getEntry(album, code).duplicates, 0)} repetidas`
+                : `${owned}/${total} coladas`}
             </div>
           </div>
           <div className="text-white font-display font-black text-xl text-stroke-shadow">
