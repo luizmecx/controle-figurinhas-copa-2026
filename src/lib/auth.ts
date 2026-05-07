@@ -37,9 +37,6 @@ export function signUp(user: string, pwd: string): { success: boolean; error?: s
   users[lowerUser] = pwd;
   localStorage.setItem(USERS_KEY, JSON.stringify(users));
   
-  currentUser = lowerUser;
-  localStorage.setItem(SESSION_KEY, lowerUser);
-  emit();
   return { success: true };
 }
 
