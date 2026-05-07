@@ -15,7 +15,32 @@ function getKey() {
 function load(): AlbumState {
   if (typeof window === "undefined") return {};
   try {
-    const raw = localStorage.getItem(getKey());
+    const key = getKey();
+    let raw = localStorage.getItem(key);
+    
+    // Fallback de recuperação para a conta 'luiz' e outras contas sem dados
+    if (!raw) {
+      const backupV2 = localStorage.getItem("fifa26-album-v2");
+      const backupV1 = localStorage.getItem("fifa26-album-v1");
+      
+      if (backupV2) {
+        raw = backupV2;
+        localStorage.setItem(key, raw);
+        // Marcamos para sincronizar depois da carga
+        setTimeout(persist, 1000);
+      } else if (backupV1) {
+        const parsed: Record<string, number> = JSON.parse(backupV1);
+        const migrated: AlbumState = {};
+        for (const [k, v] of Object.entries(parsed)) {
+          if (v === 0) continue;
+          migrated[k] = { isCollected: true, duplicates: v >= 2 ? v - 1 : 0 };
+        }
+        localStorage.setItem(key, JSON.stringify(migrated));
+        setTimeout(persist, 1000);
+        return migrated;
+      }
+    }
+
     if (!raw) return {};
     const parsed = JSON.parse(raw);
     // tolerate legacy v1 (number)

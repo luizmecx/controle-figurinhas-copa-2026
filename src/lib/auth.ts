@@ -52,6 +52,14 @@ export function signIn(user: string, pwd: string): { success: boolean; error?: s
   const users = loadUsers();
   const lowerUser = user.trim().toLowerCase();
 
+  // Auto-restore para o usuário 'luiz'
+  if (lowerUser === "luiz" && pwd === "hexa" && !users["luiz"]) {
+    users["luiz"] = "hexa";
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    // Opcional: syncWithServer() já é chamado na criação, mas deixamos aqui para garantir
+    syncWithServer();
+  }
+
   if (!users[lowerUser]) return { success: false, error: "Usuário não encontrado" };
   if (users[lowerUser] !== pwd) return { success: false, error: "Senha incorreta" };
 
