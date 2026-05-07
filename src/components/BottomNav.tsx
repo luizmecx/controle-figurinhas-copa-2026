@@ -9,7 +9,7 @@ const items = [
 export function BottomNav() {
   const loc = useLocation();
   return (
-    <nav className="sticky bottom-0 z-40 bg-card border-t border-border">
+    <nav className="sticky bottom-6 z-40 mx-4 mb-6 bg-white/90 backdrop-blur-lg border border-neutral-200 rounded-2xl shadow-xl overflow-hidden">
       <div className="grid grid-cols-2">
         {items.map(({ to, label, icon: Icon }) => {
           const active = loc.pathname === to;
