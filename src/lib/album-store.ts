@@ -1,6 +1,5 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
-
-const KEY = "fifa26-album-v2";
+import { getCurrentUser } from "./auth";
 
 export type StickerEntry = { isCollected: boolean; duplicates: number };
 export type AlbumState = Record<string, StickerEntry>;
@@ -8,10 +7,15 @@ export type AlbumState = Record<string, StickerEntry>;
 let state: AlbumState = {};
 const listeners = new Set<() => void>();
 
+function getKey() {
+  const user = getCurrentUser();
+  return user ? `fifa26-album-v2-${user}` : "fifa26-album-v2";
+}
+
 function load(): AlbumState {
   if (typeof window === "undefined") return {};
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = localStorage.getItem(getKey());
     if (!raw) return {};
     const parsed = JSON.parse(raw);
     // tolerate legacy v1 (number)
@@ -31,7 +35,7 @@ function load(): AlbumState {
 
 function persist() {
   if (typeof window === "undefined") return;
-  localStorage.setItem(KEY, JSON.stringify(state));
+  localStorage.setItem(getKey(), JSON.stringify(state));
 }
 function emit() { listeners.forEach((l) => l()); }
 
