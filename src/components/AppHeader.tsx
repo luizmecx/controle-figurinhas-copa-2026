@@ -38,7 +38,7 @@ export function AppHeader({
               <img 
                 src="https://s2-ge.glbimg.com/RGU5LEYpvpcPRro8r9wxAEvmltU=/0x0:2048x2048/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_bc8228b6673f488aa253bbcb03c80ec5/internal_photos/bs/2023/q/Q/e3U1thRemgE9lEG0J4gQ/logo-fifa.jpg" 
                 alt="2026 Logo" 
-                className="w-full h-full object-cover p-1.5"
+                className="w-full h-full object-cover"
               />
             </div>
             <div className="flex-1 min-w-0">
