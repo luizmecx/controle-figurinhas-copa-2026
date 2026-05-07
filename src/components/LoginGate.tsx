@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Lock, Trophy, User } from "lucide-react";
 import { signIn, signUp, useAuth } from "@/lib/auth";
-import { syncWithServer } from "@/lib/api";
+import { syncWithServer, getLocalAlbums, getLocalTimestamps, getLocalUsers } from "@/lib/api";
 
 // TODO: Trocar foto de fundo aqui
 const STADIUM_BG =
@@ -51,6 +51,37 @@ export function LoginGate({ children }: { children: React.ReactNode }) {
         setUser("");
         setPwd("");
       }
+    }
+  };
+
+  const exportData = () => {
+    const data = {
+      users: getLocalUsers(),
+      albums: getLocalAlbums(),
+      timestamps: getLocalTimestamps()
+    };
+    navigator.clipboard.writeText(JSON.stringify(data));
+    setMsg("Dados copiados! Cole-os no outro dispositivo.");
+  };
+
+  const importData = () => {
+    const dataStr = prompt("Cole os dados copiados aqui:");
+    if (!dataStr) return;
+    try {
+      const data = JSON.parse(dataStr);
+      if (data.users && data.albums) {
+        localStorage.setItem("fifa26-users", JSON.stringify(data.users));
+        if (data.timestamps) localStorage.setItem("fifa26-timestamps", JSON.stringify(data.timestamps));
+        for (const [u, album] of Object.entries(data.albums)) {
+          localStorage.setItem(`fifa26-album-v2-${u}`, JSON.stringify(album));
+        }
+        setMsg("Dados importados com sucesso! Você já pode entrar.");
+        syncWithServer();
+      } else {
+        setErr("Formato de dados inválido.");
+      }
+    } catch {
+      setErr("Erro ao ler os dados colados.");
     }
   };
 
@@ -160,6 +191,12 @@ export function LoginGate({ children }: { children: React.ReactNode }) {
           >
             {isRegistering ? "Já tenho uma conta. Entrar!" : "Não tem conta? Cadastre-se"}
           </button>
+        </div>
+
+        <div className="mt-6 pt-4 border-t border-white/10 flex justify-center gap-4 text-white/50 text-[10px] uppercase font-bold">
+          <button type="button" onClick={exportData} className="hover:text-white transition">Exportar Dados</button>
+          <span>|</span>
+          <button type="button" onClick={importData} className="hover:text-white transition">Importar Dados</button>
         </div>
       </motion.form>
     </div>
