@@ -33,11 +33,13 @@ function load(): AlbumState {
   }
 }
 
-import { syncWithServer } from "./api";
+import { syncWithServer, updateLocalTimestamp } from "./api";
 
 function persist() {
   if (typeof window === "undefined") return;
   localStorage.setItem(getKey(), JSON.stringify(state));
+  const user = getCurrentUser();
+  if (user) updateLocalTimestamp(user);
   syncWithServer();
 }
 function emit() { listeners.forEach((l) => l()); }

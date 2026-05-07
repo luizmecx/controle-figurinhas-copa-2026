@@ -26,31 +26,31 @@ function localDbPlugin() {
             const clientData = JSON.parse(body);
             const dbPath = path.resolve(process.cwd(), 'database.json');
             
-            let serverData: any = { users: {}, albums: {} };
+            let serverData: any = { users: {}, albums: {}, timestamps: {} };
             if (fs.existsSync(dbPath)) {
               serverData = JSON.parse(fs.readFileSync(dbPath, 'utf-8'));
+              if (!serverData.timestamps) serverData.timestamps = {};
             }
+
+            const clientTimestamps = clientData.timestamps || {};
+            const serverTimestamps = serverData.timestamps || {};
 
             // Merge users
             const mergedUsers = { ...serverData.users, ...clientData.users };
 
-            // Merge albums
+            // Merge albums using Last-Write-Wins based on timestamps
             const mergedAlbums = { ...serverData.albums };
             for (const [user, album] of Object.entries(clientData.albums || {})) {
-              if (!mergedAlbums[user]) mergedAlbums[user] = {};
-              const userAlbum = album as Record<string, { isCollected: boolean; duplicates: number }>;
+              const clientTs = clientTimestamps[user] || 0;
+              const serverTs = serverTimestamps[user] || 0;
               
-              for (const [code, entry] of Object.entries(userAlbum)) {
-                const serverEntry = mergedAlbums[user][code] || { isCollected: false, duplicates: 0 };
-                
-                mergedAlbums[user][code] = {
-                  isCollected: serverEntry.isCollected || entry.isCollected,
-                  duplicates: Math.max(serverEntry.duplicates || 0, entry.duplicates || 0)
-                };
+              if (clientTs > serverTs || !mergedAlbums[user]) {
+                mergedAlbums[user] = album;
+                serverTimestamps[user] = clientTs;
               }
             }
 
-            const newDb = { users: mergedUsers, albums: mergedAlbums };
+            const newDb = { users: mergedUsers, albums: mergedAlbums, timestamps: serverTimestamps };
             fs.writeFileSync(dbPath, JSON.stringify(newDb, null, 2));
 
             res.setHeader('Content-Type', 'application/json');
