@@ -107,9 +107,18 @@ export function SectionAccordion({
             className="relative z-0 overflow-hidden"
           >
             <div className="p-3 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-14 2xl:grid-cols-16 gap-2 bg-background">
-              {codes.map((code) => (
-                <StickerCard key={code} code={code} album={album} isDuplicatesView={isDuplicatesView} />
-              ))}
+              {codes.map((code) => {
+                const entry = getEntry(album, code);
+                return (
+                  <StickerCard 
+                    key={code} 
+                    code={code} 
+                    isCollected={entry.isCollected}
+                    duplicates={entry.duplicates}
+                    isDuplicatesView={isDuplicatesView} 
+                  />
+                );
+              })}
             </div>
           </motion.div>
         )}
