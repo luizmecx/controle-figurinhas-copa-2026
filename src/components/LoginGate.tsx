@@ -5,7 +5,7 @@ import { signIn, useAuth } from "@/lib/auth";
 
 // TODO: Trocar foto de fundo aqui
 const STADIUM_BG =
-  "https://images.unsplash.com/photo-1486286701208-1d58e9338013?w=1600&q=80&auto=format&fit=crop";
+  "https://tntsports.com.br/__export/1593539121650/sites/esporteinterativo/img/2020/06/30/brasil2002.jpg";
 
 export function LoginGate({ children }: { children: React.ReactNode }) {
   const { signedIn, hydrated } = useAuth();
@@ -36,7 +36,7 @@ export function LoginGate({ children }: { children: React.ReactNode }) {
         className="relative z-10 w-full max-w-sm rounded-3xl p-7 bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl"
       >
         <div className="flex items-center justify-center mb-3">
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-green-600 via-yellow-400 to-blue-700 flex items-center justify-center border-2 border-white shadow-lg">
+          <div className="w-14 h-14 rounded-full bg-green-600 flex items-center justify-center border-2 border-white shadow-lg">
             <Trophy className="text-white" size={26} />
           </div>
         </div>
@@ -75,7 +75,7 @@ export function LoginGate({ children }: { children: React.ReactNode }) {
 
         <button
           type="submit"
-          className="w-full mt-5 py-3 rounded-xl font-display font-black text-white bg-gradient-to-r from-green-700 via-yellow-500 to-blue-700 shadow-lg hover:opacity-95 active:scale-[0.98] transition"
+          className="w-full mt-5 py-3 rounded-xl font-display font-black text-white bg-gradient-to-r from-green-600 to-yellow-500 shadow-lg hover:opacity-95 active:scale-[0.98] transition"
         >
           ENTRAR
         </button>
