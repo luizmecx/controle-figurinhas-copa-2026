@@ -32,7 +32,7 @@ export function SectionAccordion({
     <div className="rounded-xl overflow-hidden border border-border bg-card shadow-sm">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="relative w-full text-left"
+        className="sticky top-0 z-10 w-full text-left"
       >
         <div className="bg-neutral-800 px-4 py-3 flex items-center gap-3">
           <div className="flex-1 min-w-0">
@@ -65,9 +65,9 @@ export function SectionAccordion({
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="overflow-hidden"
+            className="relative z-0 overflow-hidden"
           >
-            <div className="p-3 grid grid-cols-4 sm:grid-cols-5 gap-2 bg-background">
+            <div className="p-3 pt-6 grid grid-cols-4 sm:grid-cols-5 gap-2 bg-background">
               {codes.map((code) => (
                 <StickerCard key={code} code={code} album={album} />
               ))}
