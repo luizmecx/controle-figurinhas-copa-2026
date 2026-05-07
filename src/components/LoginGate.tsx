@@ -13,6 +13,7 @@ export function LoginGate({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
   const [err, setErr] = useState("");
+  const [msg, setMsg] = useState("");
 
   if (!hydrated) return null;
   if (signedIn) return <>{children}</>;
@@ -20,16 +21,31 @@ export function LoginGate({ children }: { children: React.ReactNode }) {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     setErr("");
+    setMsg("");
     
     if (!user.trim() || !pwd.trim()) {
       setErr("Preencha usuário e senha");
       return;
     }
 
-    const result = isRegistering ? signUp(user, pwd) : signIn(user, pwd);
-    
-    if (!result.success) {
-      setErr(result.error || "Erro desconhecido");
+    if (isRegistering) {
+      const result = signUp(user, pwd);
+      if (result.success) {
+        setIsRegistering(false);
+        setUser("");
+        setPwd("");
+        setMsg("Cadastro concluído! Agora faça o login.");
+      } else {
+        setErr(result.error || "Erro ao cadastrar");
+      }
+    } else {
+      const result = signIn(user, pwd);
+      if (!result.success) {
+        setErr(result.error || "Erro ao logar");
+      } else {
+        setUser("");
+        setPwd("");
+      }
     }
   };
 
@@ -108,6 +124,16 @@ export function LoginGate({ children }: { children: React.ReactNode }) {
               {err}
             </motion.p>
           )}
+
+          {msg && (
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-green-300 text-xs mt-2 text-center font-bold"
+            >
+              {msg}
+            </motion.p>
+          )}
         </div>
 
         <button
@@ -123,6 +149,7 @@ export function LoginGate({ children }: { children: React.ReactNode }) {
             onClick={() => {
               setIsRegistering(!isRegistering);
               setErr("");
+              setMsg("");
             }}
             className="text-white/80 text-xs font-medium hover:text-white underline underline-offset-2 transition"
           >
