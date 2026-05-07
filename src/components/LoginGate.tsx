@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Lock, Trophy, User } from "lucide-react";
 import { signIn, signUp, useAuth } from "@/lib/auth";
+import { syncWithServer } from "@/lib/api";
 
 // TODO: Trocar foto de fundo aqui
 const STADIUM_BG =
@@ -9,6 +10,10 @@ const STADIUM_BG =
 
 export function LoginGate({ children }: { children: React.ReactNode }) {
   const { signedIn, hydrated } = useAuth();
+  
+  useEffect(() => {
+    syncWithServer();
+  }, []);
   const [isRegistering, setIsRegistering] = useState(false);
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");

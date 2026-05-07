@@ -33,15 +33,25 @@ function load(): AlbumState {
   }
 }
 
+import { syncWithServer } from "./api";
+
 function persist() {
   if (typeof window === "undefined") return;
   localStorage.setItem(getKey(), JSON.stringify(state));
+  syncWithServer();
 }
 function emit() { listeners.forEach((l) => l()); }
 
 export function initAlbum() {
   state = load();
   emit();
+}
+
+if (typeof window !== "undefined") {
+  window.addEventListener("database-synced", () => {
+    state = load();
+    emit();
+  });
 }
 
 function get(code: string): StickerEntry {

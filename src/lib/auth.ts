@@ -1,4 +1,5 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
+import { syncWithServer } from "./api";
 
 const USERS_KEY = "fifa26-users";
 const SESSION_KEY = "fifa26-session";
@@ -42,6 +43,7 @@ export function signUp(user: string, pwd: string): { success: boolean; error?: s
 
   users[lowerUser] = pwd;
   localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  syncWithServer();
   
   return { success: true };
 }
@@ -68,6 +70,7 @@ export function changePassword(user: string, newPwd: string): { success: boolean
 
   users[lowerUser] = newPwd;
   localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  syncWithServer();
   return { success: true };
 }
 
