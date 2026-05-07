@@ -27,12 +27,19 @@ export function AppHeader({
 
   return (
     <header className="sticky top-0 z-30 shadow-lg">
-      <div className="relative bg-gradient-to-r from-green-700 via-yellow-500 to-blue-700">
+      <div 
+        className="relative bg-cover bg-center"
+        style={{ backgroundImage: 'url(https://tntsports.com.br/__export/1593539121650/sites/esporteinterativo/img/2020/06/30/brasil2002.jpg)' }}
+      >
         <div className="absolute inset-0 bg-black/40 backdrop-blur-md" />
         <div className="relative">
           <div className="px-4 pt-4 pb-2 flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-black flex items-center justify-center border-2 border-white shrink-0">
-              <span className="modular-display text-white text-lg leading-none">26</span>
+            <div className="w-11 h-11 rounded-full bg-white flex items-center justify-center border-2 border-white shrink-0 shadow-sm overflow-hidden">
+              <img 
+                src="https://seeklogo.com/images/F/fifa-world-cup-2026-logo-B3F0270DAA-seeklogo.com.png" 
+                alt="2026 Logo" 
+                className="w-full h-full object-cover p-1.5"
+              />
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-[10px] font-bold tracking-[0.22em] text-white/85">
