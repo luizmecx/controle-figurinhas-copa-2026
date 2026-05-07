@@ -10,6 +10,7 @@ export function SectionAccordion({
   album,
   defaultOpen = false,
   filterCodes,
+  isDuplicatesView = false,
 }: {
   section: Section;
   album: AlbumState;
