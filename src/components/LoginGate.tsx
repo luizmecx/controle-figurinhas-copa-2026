@@ -5,7 +5,7 @@ import { signIn, useAuth } from "@/lib/auth";
 
 // TODO: Trocar foto de fundo aqui
 const STADIUM_BG =
-  "https://tntsports.com.br/__export/1593539121650/sites/esporteinterativo/img/2020/06/30/brasil2002.jpg";
+  "https://www.seropedicaonline.com/wp-content/uploads/2022/06/2002-brazil-1200x800-1.jpg";
 
 export function LoginGate({ children }: { children: React.ReactNode }) {
   const { signedIn, hydrated } = useAuth();

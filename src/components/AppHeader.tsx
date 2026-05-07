@@ -29,7 +29,7 @@ export function AppHeader({
     <header className="sticky top-0 z-30 shadow-lg">
       <div 
         className="relative bg-cover bg-center"
-        style={{ backgroundImage: 'url(https://tntsports.com.br/__export/1593539121650/sites/esporteinterativo/img/2020/06/30/brasil2002.jpg)' }}
+        style={{ backgroundImage: 'url(https://www.seropedicaonline.com/wp-content/uploads/2022/06/2002-brazil-1200x800-1.jpg)' }}
       >
         <div className="absolute inset-0 bg-black/40 backdrop-blur-md" />
         <div className="relative">
