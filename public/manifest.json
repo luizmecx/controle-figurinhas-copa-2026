@@ -10,6 +10,11 @@
       "src": "/favicon.svg",
       "type": "image/svg+xml",
       "sizes": "any"
+    },
+    {
+      "src": "/pwa-icon.jpg",
+      "type": "image/jpeg",
+      "sizes": "2048x2048"
     }
   ]
 }
