@@ -1,7 +1,7 @@
-import { Search, Settings, X, Share2, RotateCcw, LogOut, Check, User, Key, ChevronDown, Eye, EyeOff } from "lucide-react";
-import { useState, useMemo } from "react";
+import { Search, Settings, X, Share2, RotateCcw, LogOut, Check, User, Key, ChevronDown, Eye, EyeOff, Download, Upload } from "lucide-react";
+import { useState, useMemo, useRef } from "react";
 import { ALL_CODES } from "@/lib/stickers-data";
-import { getEntry, resetAlbum, useAlbum } from "@/lib/album-store";
+import { getEntry, resetAlbum, useAlbum, importAlbum } from "@/lib/album-store";
 import { signOut, changePassword, getCurrentUser, getCurrentPassword } from "@/lib/auth";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -118,6 +118,7 @@ function SettingsModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
   const album = useAlbum();
   const [confirm, setConfirm] = useState(false);
   const [copied, setCopied] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [profileOpen, setProfileOpen] = useState(false);
   const [showCurrentPwd, setShowCurrentPwd] = useState(false);
@@ -150,6 +151,36 @@ function SettingsModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
         setTimeout(() => setCopied(false), 1500);
       }
     } catch {}
+  };
+
+  const handleExport = () => {
+    const dataStr = JSON.stringify(album);
+    const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+    const exportFileDefaultName = `meu-album-copa26-${new Date().toISOString().split('T')[0]}.json`;
+
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
+    linkElement.click();
+  };
+
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const json = JSON.parse(event.target?.result as string);
+        importAlbum(json);
+        alert("Álbum importado com sucesso!");
+      } catch (err) {
+        alert("Erro ao importar o arquivo. Verifique se o formato é válido.");
+      }
+    };
+    reader.readAsText(file);
+    // Reset the input so the same file can be selected again
+    e.target.value = "";
   };
 
   const handlePwdSubmit = (e: React.FormEvent) => {
@@ -273,6 +304,30 @@ function SettingsModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
                   </div>
                 </div>
               </button>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={handleExport}
+                  className="flex-1 bg-white border border-neutral-200 text-neutral-800 rounded-xl p-4 flex items-center justify-center gap-2 font-display font-bold shadow-sm active:scale-[0.98] transition"
+                >
+                  <Download size={20} />
+                  <span>Exportar</span>
+                </button>
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex-1 bg-white border border-neutral-200 text-neutral-800 rounded-xl p-4 flex items-center justify-center gap-2 font-display font-bold shadow-sm active:scale-[0.98] transition"
+                >
+                  <Upload size={20} />
+                  <span>Importar</span>
+                </button>
+                <input
+                  type="file"
+                  accept=".json"
+                  ref={fileInputRef}
+                  onChange={handleImport}
+                  className="hidden"
+                />
+              </div>
 
               {!confirm ? (
                 <button

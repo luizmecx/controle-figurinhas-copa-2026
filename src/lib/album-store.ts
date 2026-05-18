@@ -119,6 +119,11 @@ export function resetAlbum() {
   persist(); emit();
 }
 
+export function importAlbum(newData: AlbumState) {
+  state = { ...newData };
+  persist(); emit();
+}
+
 export function getEntry(album: AlbumState, code: string): StickerEntry {
   return album[code] ?? { isCollected: false, duplicates: 0 };
 }
